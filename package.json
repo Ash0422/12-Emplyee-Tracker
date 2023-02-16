@@ -1,0 +1,30 @@
+{
+  "name": "12-emplyee-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "employee.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ash0422/12-Emplyee-Tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ash0422/12-Emplyee-Tracker/issues"
+  },
+  "homepage": "https://github.com/Ash0422/12-Emplyee-Tracker#readme",
+  "dependencies": {
+    "asciiart-logo": "^0.2.7",
+    "console.table": "^0.10.0",
+    "inquirer": "^8.2.4",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.1.2"
+  }
+}
