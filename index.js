@@ -1,11 +1,10 @@
+// Import required packages
 const inquirer = require("inquirer");
 const Query = require("./lib/queries");
-
-
 const logo = require('asciiart-logo');
 const config = require('./package.json');
 
-
+// Function that presents the initial prompt to the user
 const selectCRUD = () => {
     inquirer.prompt([
         {
@@ -15,22 +14,27 @@ const selectCRUD = () => {
             choices: ['Create', 'Read', 'Update', 'Delete', 'Exit'], 
         }
     ]).then((answer) => {
+        // If the user selects "Exit," terminate the process
         if (answer.crud === 'Exit') {
             process.exit();
-        } else {
+        } 
+        // Otherwise, call selectTable with the user's selection
+        else {
             selectTable(answer.crud);
         }
     });
 }
-
+// Function that presents the user with a list of tables from which to select
 const selectTable = async (crud) => {
     let choices = [];
     if (crud === 'Read') {
+          // If the user selected "Read," display a list of read options
         choices = ['Employees', 'Employees by Manager', 'Roles', 'Departments', 'Departments with Total Budget', '<- Back'];
     } else {
+        // Otherwise, display a list of create, update, and delete options
         choices = ['Employees', 'Roles', 'Departments', '<- Back'];
     }
-
+    // Prompt the user for their selection
     let answer = await inquirer.prompt([
         {
             type: 'list',
@@ -39,20 +43,20 @@ const selectTable = async (crud) => {
             choices: choices
         }
     ]);
-
+     // If the user selects "<- Back," return to the previous prompt
     if (answer.table === '<- Back') {
         selectCRUD();
     }
-
-   
     else if (crud === 'Read') {
         selectOptions(crud, answer.table);
-    } else {
+    } 
+    // Otherwise, call displayTable to display the updated table and then call selectOptions with the selected CRUD operation and table
+    else {
         await displayTable(answer.table);
         await selectOptions(crud, answer.table);
     }
 }
-
+// Function that determines what fields, where clauses, and columns are required for the selected CRUD operation and table
 const selectOptions = async (crud, table) => {
  
     let fields;
@@ -66,8 +70,6 @@ const selectOptions = async (crud, table) => {
     } else if (crud === 'Create' && table === 'Departments') {
         fields = await protDepartment();
     }
-
-  
     else if (crud === 'Read' && table !== 'Employees by Manager' && table !== 'Departments with Total Budget') {
         fields = {};
     } else if (crud === 'Read' && table === 'Employees by Manager') {
@@ -85,8 +87,6 @@ const selectOptions = async (crud, table) => {
         CONCAT(Employees.first_name, ' ', Employees.last_name) AS 'employee', salary
         `;
     }
-
-   
     else if (crud === 'Update' && table === 'Employees') {
         updateAnswer = await updateEmployees();
         fields = updateAnswer.fields;
@@ -100,8 +100,6 @@ const selectOptions = async (crud, table) => {
         fields = updateAnswer.fields;
         where = updateAnswer.where;
     } 
-
-   
     else if (crud === 'Delete' && table === 'Employees') {
         updateAnswer = await deleteEmployee();
         where = `id=${updateAnswer.id}`;
@@ -112,9 +110,6 @@ const selectOptions = async (crud, table) => {
         updateAnswer = await deleteDepartment();
         where = `department_id=${updateAnswer.department_id}`;
     }
-
-
-  
     runMainQuery(crud, table, fields, where, columns);
 }
 
@@ -127,7 +122,7 @@ const proManager = async () => {
         }
     ]);
 }
-
+// function to delete a department
 const deleteDepartment = async () => {
     return inquirer.prompt([
         {
@@ -138,7 +133,7 @@ const deleteDepartment = async () => {
     ]);
 }
 
-
+// function to delete a role
 const deleteRole = async () => {
     return inquirer.prompt([
         {
@@ -148,7 +143,7 @@ const deleteRole = async () => {
         }
     ]);
 }
-
+// function to delete an employee
 const deleteEmployee = async () => {
     return inquirer.prompt([
         {
@@ -158,7 +153,7 @@ const deleteEmployee = async () => {
         }
     ]);
 }
-
+// function to update a department
 const updateDepartment = async () => {
     let answer1 = await inquirer.prompt([
         {
@@ -180,7 +175,7 @@ const updateDepartment = async () => {
     return { where: `department_id=${answer1.department_id}`, fields: answer2 }
 }
 
-
+// function to update a Role
 const updateRoles = async () => {
     let answer1 = await inquirer.prompt([
         {
@@ -213,7 +208,7 @@ const updateRoles = async () => {
     return { where: `role_id=${answer1.role_id}`, fields: answer2 }
 }
 
-
+// function to update an employee
 const updateEmployees = async () => {
     let answer1 = await inquirer.prompt([
         {
@@ -253,7 +248,7 @@ const updateEmployees = async () => {
 }
 
 
-
+// function to prompt a department
 const protDepartment = async () => {
     return await inquirer.prompt([
         {
@@ -263,7 +258,7 @@ const protDepartment = async () => {
         }
     ]);
 }
-
+// function to prompt a role
 const protRole = async () => {
     return await inquirer.prompt([
         {
@@ -283,7 +278,7 @@ const protRole = async () => {
         },
     ]);
 }
-
+// function to prompt an employee
 const protEmployees = async () => {
     return await inquirer.prompt([
         {
@@ -308,7 +303,7 @@ const protEmployees = async () => {
         }
     ]);
 }
-
+// run the main query
 const runMainQuery = async (crud, table, fields, where, ...columns) => {
     const queryTwo = await new Query(crud, table, [fields], where, columns).buildQuery();
     console.log(`\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n✅ ${queryTwo.message}`)
@@ -327,7 +322,7 @@ const runMainQuery = async (crud, table, fields, where, ...columns) => {
     await disAll();
     await selectCRUD();
 }
-
+// display table
 const displayTable = async (table, queryTwoMessage) => {
     const queryOne = await new Query('Read', table, [{}], '', '*').buildQuery();
     if (queryTwoMessage === true) {
@@ -338,7 +333,7 @@ const displayTable = async (table, queryTwoMessage) => {
     
     console.table(queryOne.data);
 }
-
+//  display All queries
 const disAll = async () => {
     const queryZero = await new Query('Read All', 'Employees', [{}], '', `
         Employees.id, CONCAT(Employees.first_name, ' ', Employees.last_name) AS 'employee', 
@@ -363,7 +358,7 @@ const init = async () => {
     await selectCRUD();
 }
 
-
+// display ascii logo on screen
 const displayAscii = () => {
     console.log(logo(config).render());
 }
