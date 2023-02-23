@@ -1,10 +1,12 @@
 {
-  "name": "12-emplyee-tracker",
+  "name": "Employee-Manager",
+  "description": " A Solution for managing a company's indexes",
   "version": "1.0.0",
-  "description": "",
-  "main": "employee.js",
-  "directories": {
-    "lib": "lib"
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "watch": "nodemon index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
