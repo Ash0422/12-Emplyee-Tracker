@@ -12,10 +12,11 @@ These interfaces are called content management systems (CMS).  build a command-l
 database, using Node.js, Inquirer, and MySQL.
 ```
 ## Screenshots
-![image of the application 1](./assets/images/screenshot1.png)
-![image of the application 2](./assets/images/screenshot02.png)
-![image of the application 3](./assets/images/screenshot3.png)
-![image of the application 3](./assets/images/screenshot4.png)
+![image of the application 1](./assets/images/Screenshot1.png)
+![image of the application 2](./assets/images/Screenshot02.png)
+![image of the application 3](./assets/images/Screenshot2.png)
+![image of the application 3](./assets/images/Screenshot3.png)
+![image of the application 3](./assets/images/Screenshot4.png)
 
 ## Installation
 To install the project follow these steps:
